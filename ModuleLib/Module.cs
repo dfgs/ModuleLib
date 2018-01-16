@@ -42,7 +42,10 @@ namespace ModuleLib
 		{
 			LogEnter();
 		}
-
+		protected string CreateExceptionMessage(Exception ex,[CallerMemberName]string MethodName = null)
+		{
+			return $"An unexpected exception occured in {GetType().Name}:{MethodName} ({ex.Message})";
+		}
 		protected void LogEnter([CallerMemberName]string MethodName = null)
 		{
 			Logger.LogEnter(ID, Name, MethodName);
@@ -57,7 +60,7 @@ namespace ModuleLib
 		}
 		protected void Log(Exception ex, [CallerMemberName]string MethodName = null)
 		{
-			Logger.Log(ID, Name, MethodName, LogLevels.Error, $"Unexpected exception occured ({ex.Message})");
+			Logger.Log(ID, Name, MethodName, LogLevels.Error, CreateExceptionMessage(ex,MethodName));
 		}
 
 
