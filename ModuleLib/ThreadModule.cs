@@ -197,7 +197,7 @@ namespace ModuleLib
 			Log(LogLevels.Debug, "Sleep for " + Milliseconds.ToString() + " milliseconds...");
 			result = WaitHandle.WaitAny(Handles, Milliseconds);
 			Log(LogLevels.Debug, "Wait handle returned result " + result.ToString());
-
+			
 			if (result == WaitHandle.WaitTimeout) return null;
 			else return Handles[result];
 		}

@@ -40,6 +40,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AtModule.cs" />
     <Compile Include="IModule.cs" />
     <Compile Include="Module.cs" />
     <Compile Include="ModuleStates.cs" />
