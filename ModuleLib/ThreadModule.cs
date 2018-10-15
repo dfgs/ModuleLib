@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace ModuleLib
 {
-	public abstract class ThreadModule:Module
+	public abstract class ThreadModule:Module,IThreadModule
 	{
 		
 		protected int StopTimeout
@@ -82,7 +82,7 @@ namespace ModuleLib
 			}
 		}
 
-		protected bool OnStart()
+		private bool OnStart()
 		{
 			LogEnter();
 
@@ -149,7 +149,7 @@ namespace ModuleLib
 			}
 		}
 
-		protected bool OnStop()
+		private bool OnStop()
 		{
 			LogEnter();
 

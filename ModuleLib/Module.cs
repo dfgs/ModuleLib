@@ -32,6 +32,8 @@ namespace ModuleLib
 
 		public Module(string Name,ILogger Logger)
 		{
+			if (Name == null) throw new ArgumentNullException("Name");
+			if (Logger==null) throw new ArgumentNullException("Logger");
 			idCounter++;
 			this.ID = idCounter;
 			this.Name = Name;

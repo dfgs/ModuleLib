@@ -42,6 +42,7 @@
   <ItemGroup>
     <Compile Include="AtModule.cs" />
     <Compile Include="IModule.cs" />
+    <Compile Include="IThreadModule.cs" />
     <Compile Include="Module.cs" />
     <Compile Include="ModuleStates.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

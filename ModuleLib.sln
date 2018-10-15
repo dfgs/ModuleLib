@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ModuleLib", "ModuleLib\Modu
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LogLib", "..\LogLib\LogLib\LogLib.csproj", "{EF4B0001-2859-4A09-8F95-3E5BEF4A5272}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ModuleLibUnitTest", "ModuleLibUnitTest\ModuleLibUnitTest.csproj", "{6E540F59-3679-48B1-ACCD-A1D0E3BF0926}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{EF4B0001-2859-4A09-8F95-3E5BEF4A5272}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EF4B0001-2859-4A09-8F95-3E5BEF4A5272}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{EF4B0001-2859-4A09-8F95-3E5BEF4A5272}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6E540F59-3679-48B1-ACCD-A1D0E3BF0926}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6E540F59-3679-48B1-ACCD-A1D0E3BF0926}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6E540F59-3679-48B1-ACCD-A1D0E3BF0926}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6E540F59-3679-48B1-ACCD-A1D0E3BF0926}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
