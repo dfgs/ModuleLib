@@ -41,6 +41,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AtModule.cs" />
+    <Compile Include="IAtModule.cs" />
     <Compile Include="IModule.cs" />
     <Compile Include="IThreadModule.cs" />
     <Compile Include="Module.cs" />

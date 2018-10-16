@@ -8,7 +8,7 @@ using LogLib;
 
 namespace ModuleLib
 {
-	public abstract class AtModule<EventType> : ThreadModule
+	public abstract class AtModule<EventType> : ThreadModule,IAtModule
 	{
 		private SortedList<DateTime, EventType> events;
 
@@ -96,8 +96,6 @@ namespace ModuleLib
 					}
 					OnTriggerEvent(item.Value.Value);
 				}
-
-
 
 			}
 

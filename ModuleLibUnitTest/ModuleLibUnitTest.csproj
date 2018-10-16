@@ -48,7 +48,9 @@
     <Reference Include="System.Core" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Mocks\MockedAtModule.cs" />
     <Compile Include="Mocks\MockedThreadModule.cs" />
+    <Compile Include="AtModuleUnitTest.cs" />
     <Compile Include="ThreadModuleUnitTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
