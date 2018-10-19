@@ -16,7 +16,7 @@ namespace ModuleLibUnitTest.Mocks
 			get;
 			set;
 		}
-		public MockedAtModule() : base("MockedAtModule", new ConsoleLogger(new DefaultLogFormatter()), ThreadPriority.Normal, 1000)
+		public MockedAtModule() : base("MockedAtModule", new ConsoleLogger(new DefaultLogFormatter()), ThreadPriority.Normal, 5000)
 		{
 			Events = new List<DateTime>();
 		}

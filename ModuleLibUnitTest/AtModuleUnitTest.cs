@@ -66,7 +66,26 @@ namespace ModuleLibUnitTest
 			Assert.AreEqual(true, module.Stop());
 
 		}
+		[TestMethod]
+		public void ShouldQuitGracefullyWhenItemsAreScheduled()
+		{
+			MockedAtModule module;
+			DateTime[] events;
+			DateTime now;
 
+			module = new MockedAtModule();
+			Assert.AreEqual(true, module.Start());
+
+			now = DateTime.Now;
+			events = new DateTime[] { now.AddHours(1) };
+			foreach (DateTime ev in events)
+			{
+				module.Add(ev, ev);
+			}
+			Thread.Sleep(1000);
+			Assert.AreEqual(true, module.Stop());
+
+		}
 		[TestMethod]
 		public void ShouldScheduleSeveralEventsWhenModuleIsRunning()
 		{
