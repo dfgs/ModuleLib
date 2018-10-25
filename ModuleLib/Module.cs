@@ -44,9 +44,73 @@ namespace ModuleLib
 		{
 			LogEnter();
 		}
+
+		protected bool TryGet<T>(Func<T> Func,out T Result,string ErrorMessage=null,[CallerMemberName]string MethodName = null)
+		{
+			try
+			{
+				Result = Func();
+			}
+			catch(Exception ex)
+			{
+				Result = default(T);
+				Log(ex,MethodName);
+				if (ErrorMessage != null) Log(LogLevels.Error, ErrorMessage,MethodName);
+				return false;
+			}
+			return true;
+		}
+
+		protected bool Try(Action Action, string ErrorMessage = null,[CallerMemberName]string MethodName = null)
+		{
+			try
+			{
+				Action();
+			}
+			catch (Exception ex)
+			{
+				Log(ex, MethodName);
+				if (ErrorMessage != null) Log(LogLevels.Error, ErrorMessage, MethodName);
+				return false;
+			}
+			return true;
+		}
+
+		protected void TryOrThrow(Action Action, Func<Exception, Exception> NewException)
+		{
+			try
+			{
+				Action();
+			}
+			catch (Exception ex)
+			{
+				throw NewException(ex);
+			}
+		}
+		protected T TryGetOrThrow<T>(Func<T> Func, Func<Exception, Exception> NewException)
+		{
+			try
+			{
+				return Func();
+			}
+			catch (Exception ex)
+			{
+				throw NewException(ex);
+			}
+		}
+
+
 		protected string CreateExceptionMessage(Exception ex,[CallerMemberName]string MethodName = null)
 		{
-			return $"An unexpected exception occured in {GetType().Name}:{MethodName} ({ex.Message})";
+			StringBuilder sb;
+			sb = new StringBuilder();
+			while(ex!=null)
+			{
+				sb.Append("->");
+				sb.Append(ex.Message);
+				ex = ex.InnerException;
+			}
+			return $"An unexpected exception occured in {GetType().Name}:{MethodName} ({sb.ToString()})";
 		}
 		protected void LogEnter([CallerMemberName]string MethodName = null)
 		{
