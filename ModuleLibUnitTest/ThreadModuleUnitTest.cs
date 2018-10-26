@@ -13,8 +13,7 @@ namespace ModuleLibUnitTest
 		[TestMethod]
 		public void ShouldHaveValidConstructorParameters()
 		{
-			Assert.ThrowsException<ArgumentNullException>(() => { new MockedThreadModule(null, new ConsoleLogger(new DefaultLogFormatter())); });
-			Assert.ThrowsException<ArgumentNullException>(() => { new MockedThreadModule("test", null); });
+			Assert.ThrowsException<ArgumentNullException>(() => { new MockedThreadModule( null); });
 		}
 
 		[TestMethod]

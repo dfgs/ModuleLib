@@ -40,12 +40,12 @@ namespace ModuleLibUnitTest.Mocks
 			private set;
 		}
 
-		public MockedThreadModule(string Name,ILogger Logger) : base(Name, Logger)
+		public MockedThreadModule(ILogger Logger) : base(Logger)
 		{
 			ContinueEvent = new AutoResetEvent(false);
 		}
 
-		public MockedThreadModule() : base("MockedThreadModule", new ConsoleLogger(new DefaultLogFormatter()),ThreadPriority.Normal,1000)
+		public MockedThreadModule() : base(new ConsoleLogger(new DefaultLogFormatter()),ThreadPriority.Normal,1000)
 		{
 			ContinueEvent = new AutoResetEvent(false);
 		}

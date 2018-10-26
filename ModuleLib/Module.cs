@@ -18,10 +18,9 @@ namespace ModuleLib
 			private set;
 		}
 		
-		public string Name
+		public virtual string ModuleName
 		{
-			get;
-			private set;
+			get { return GetType().Name; }
 		}
 
 		protected ILogger Logger
@@ -30,13 +29,11 @@ namespace ModuleLib
 			private set;
 		}
 
-		public Module(string Name,ILogger Logger)
+		public Module(ILogger Logger)
 		{
-			if (Name == null) throw new ArgumentNullException("Name");
 			if (Logger==null) throw new ArgumentNullException("Logger");
 			idCounter++;
 			this.ID = idCounter;
-			this.Name = Name;
 			this.Logger = Logger;
 		}
 
@@ -114,19 +111,19 @@ namespace ModuleLib
 		}
 		protected void LogEnter([CallerMemberName]string MethodName = null)
 		{
-			Logger.LogEnter(ID, Name, MethodName);
+			Logger.LogEnter(ID, ModuleName, MethodName);
 		}
 		protected void LogLeave([CallerMemberName]string MethodName = null)
 		{
-			Logger.LogLeave(ID, Name, MethodName);
+			Logger.LogLeave(ID, ModuleName, MethodName);
 		}
 		protected void Log(LogLevels Level, string Message, [CallerMemberName]string MethodName = null)
 		{
-			Logger.Log(ID,Name,MethodName, Level, Message);
+			Logger.Log(ID,ModuleName,MethodName, Level, Message);
 		}
 		protected void Log(Exception ex, [CallerMemberName]string MethodName = null)
 		{
-			Logger.Log(ID, Name, MethodName, LogLevels.Error, CreateExceptionMessage(ex,MethodName));
+			Logger.Log(ID, ModuleName, MethodName, LogLevels.Error, CreateExceptionMessage(ex,MethodName));
 		}
 
 

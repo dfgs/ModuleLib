@@ -36,7 +36,7 @@ namespace ModuleLib
 		private Thread thread;
 		private ThreadPriority priority;
 
-		public ThreadModule(string Name, ILogger Logger,ThreadPriority Priority=ThreadPriority.Normal, int StopTimeout = 5000):base(Name,Logger)
+		public ThreadModule( ILogger Logger,ThreadPriority Priority=ThreadPriority.Normal, int StopTimeout = 5000):base(Logger)
 		{
 			State = ModuleStates.Stopped;
 			this.priority = Priority;
@@ -97,7 +97,7 @@ namespace ModuleLib
 			{
 				thread = new Thread(new ThreadStart(ThreadStart));
 				thread.Priority = priority;
-				thread.Name = Name;
+				thread.Name = ModuleName;
 			}
 			catch (Exception ex)
 			{

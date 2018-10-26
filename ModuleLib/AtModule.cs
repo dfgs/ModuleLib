@@ -18,7 +18,7 @@ namespace ModuleLib
 			private set;
 		}
 
-		public AtModule(string Name, ILogger Logger, ThreadPriority Priority = ThreadPriority.Normal, int StopTimeout = 5000) : base(Name, Logger, Priority, StopTimeout)
+		public AtModule(ILogger Logger, ThreadPriority Priority = ThreadPriority.Normal, int StopTimeout = 5000) : base( Logger, Priority, StopTimeout)
 		{
 			Log(LogLevels.Debug, "Create changed event");
 			changedEvent = new AutoResetEvent(false);

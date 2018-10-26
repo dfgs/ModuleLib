@@ -12,7 +12,7 @@ namespace ModuleLib
 		{
 			get;
 		}
-		string Name
+		string ModuleName
 		{
 			get;
 		}
