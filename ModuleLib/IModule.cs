@@ -1,4 +1,5 @@
-﻿using System;
+﻿using LogLib;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -16,6 +17,9 @@ namespace ModuleLib
 		{
 			get;
 		}
+
+		//ITryAction Try(Action Action);
+		//ITryFunction<T> Try<T>(Func<T> Function); 
 	}
 
 

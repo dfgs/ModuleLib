@@ -42,7 +42,7 @@ namespace ModuleLib
 			LogEnter();
 		}
 
-		protected bool TryGet<T>(Func<T> Func,out T Result,string ErrorMessage=null,[CallerMemberName]string MethodName = null)
+		/*protected bool TryGet<T>(Func<T> Func,out T Result,string ErrorMessage=null,[CallerMemberName]string MethodName = null)
 		{
 			try
 			{
@@ -94,6 +94,16 @@ namespace ModuleLib
 			{
 				throw NewException(ex);
 			}
+		}*/
+
+
+		protected ITryAction Try(Action Action, [CallerMemberName]string MethodName = null)
+		{
+			return new TryAction(this.Logger, this.ID, this.ModuleName, MethodName, Action);
+		}
+		ITryFunction<T> Try<T>(Func<T> Function, [CallerMemberName]string MethodName = null)
+		{
+			return new TryFunction<T>(this.Logger, this.ID, this.ModuleName, MethodName, Function);
 		}
 
 
