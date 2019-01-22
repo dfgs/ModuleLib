@@ -101,7 +101,7 @@ namespace ModuleLib
 		{
 			return new TryAction(this.Logger, this.ID, this.ModuleName, MethodName, Action);
 		}
-		ITryFunction<T> Try<T>(Func<T> Function, [CallerMemberName]string MethodName = null)
+		protected ITryFunction<T> Try<T>(Func<T> Function, [CallerMemberName]string MethodName = null)
 		{
 			return new TryFunction<T>(this.Logger, this.ID, this.ModuleName, MethodName, Function);
 		}
