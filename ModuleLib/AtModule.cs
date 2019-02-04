@@ -46,7 +46,7 @@ namespace ModuleLib
 
 		protected abstract void OnTriggerEvent(EventType Event);
 
-		protected override void ThreadLoop()
+		protected sealed override void ThreadLoop()
 		{
 			KeyValuePair<DateTime, EventType>? item;
 			int waitTime;

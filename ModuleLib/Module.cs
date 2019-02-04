@@ -107,18 +107,7 @@ namespace ModuleLib
 		}
 
 
-		protected string CreateExceptionMessage(Exception ex,[CallerMemberName]string MethodName = null)
-		{
-			StringBuilder sb;
-			sb = new StringBuilder();
-			while(ex!=null)
-			{
-				sb.Append("->");
-				sb.Append(ex.Message);
-				ex = ex.InnerException;
-			}
-			return $"An unexpected exception occured in {GetType().Name}:{MethodName} ({sb.ToString()})";
-		}
+		
 		protected void LogEnter([CallerMemberName]string MethodName = null)
 		{
 			Logger.LogEnter(ID, ModuleName, MethodName);
@@ -133,7 +122,8 @@ namespace ModuleLib
 		}
 		protected void Log(Exception ex, [CallerMemberName]string MethodName = null)
 		{
-			Logger.Log(ID, ModuleName, MethodName, LogLevels.Error, CreateExceptionMessage(ex,MethodName));
+			Logger.Log(ID, ModuleName, MethodName, LogLevels.Error, $"An unexpected exception occured in {ModuleName}:{MethodName} ({ExceptionFormatter.Format(ex)})");
+			;
 		}
 
 
