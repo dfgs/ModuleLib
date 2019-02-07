@@ -10,7 +10,7 @@ namespace ModuleLib
 {
 	public abstract class AtModule<EventType> : ThreadModule,IAtModule
 	{
-		private SortedList<DateTime, EventType> events;
+		private readonly SortedList<DateTime, EventType> events;
 
 		protected AutoResetEvent changedEvent
 		{
@@ -18,7 +18,7 @@ namespace ModuleLib
 			private set;
 		}
 
-		public AtModule(ILogger Logger, ThreadPriority Priority = ThreadPriority.Normal, int StopTimeout = 5000) : base( Logger, Priority, StopTimeout)
+		protected AtModule(ILogger Logger, ThreadPriority Priority = ThreadPriority.Normal, int StopTimeout = 5000) : base( Logger, Priority, StopTimeout)
 		{
 			Log(LogLevels.Debug, "Create changed event");
 			changedEvent = new AutoResetEvent(false);
@@ -87,7 +87,7 @@ namespace ModuleLib
 				{
 					Log(LogLevels.Information, $"Event list has changed");
 				}
-				else if (result != QuitEvent) 
+				else if ((item!=null)&&(result != QuitEvent))
 				{
 					Log(LogLevels.Information, $"Triggering event");
 					lock(events)

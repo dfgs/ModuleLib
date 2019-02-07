@@ -31,12 +31,12 @@ namespace ModuleLib
 		}
 
 
-		private ManualResetEvent exitEvent;
+		private readonly ManualResetEvent exitEvent;
 
 		private Thread thread;
-		private ThreadPriority priority;
+		private readonly ThreadPriority priority;
 
-		public ThreadModule( ILogger Logger,ThreadPriority Priority=ThreadPriority.Normal, int StopTimeout = 5000):base(Logger)
+		protected ThreadModule( ILogger Logger,ThreadPriority Priority=ThreadPriority.Normal, int StopTimeout = 5000):base(Logger)
 		{
 			State = ModuleStates.Stopped;
 			this.priority = Priority;
@@ -52,9 +52,6 @@ namespace ModuleLib
 			Log(LogLevels.Debug, "Dispose events");
 			exitEvent.Close();
 			QuitEvent.Close();
-
-			//Log(LogLevels.Debug, "Dispose thread");
-			
 		}
 		public bool Start()
 		{
@@ -156,7 +153,6 @@ namespace ModuleLib
 			Log(LogLevels.Debug, "Trigger quit event");
 			QuitEvent.Set();
 
-			//WriteLog(LogLevels.Debug, "Allow 5 secs to thread to stop gracefully");
 			if (exitEvent.WaitOne(StopTimeout))
 			{
 				Log(LogLevels.Debug, "Thread stopped gracefully");
