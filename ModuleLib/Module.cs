@@ -31,7 +31,7 @@ namespace ModuleLib
 
 		protected Module(ILogger Logger)
 		{
-			if (Logger==null) throw new ArgumentNullException("Logger");
+			AssertParameterNotNull("Logger", Logger);
 			idCounter++;
 			this.ID = idCounter;
 			this.Logger = Logger;
@@ -42,6 +42,10 @@ namespace ModuleLib
 			LogEnter();
 		}
 
+		protected void AssertParameterNotNull(string Name,object Value)
+		{
+			if (Value == null) throw new ArgumentNullException(Name);
+		}
 
 
 		protected ITryAction Try(Action Action, [CallerMemberName]string MethodName = null)
