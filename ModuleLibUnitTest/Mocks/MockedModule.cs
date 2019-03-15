@@ -15,7 +15,8 @@ namespace ModuleLibUnitTest.Mocks
 			get;
 			private set;
 		}
-		public MockedModule(string Value,string Message,LogLevels Level,bool ThrowException) : base(NullLogger.Instance)
+
+		public MockedModule(ILogger Logger, string Value,string Message,LogLevels Level,bool ThrowException) : base(Logger)
 		{
 			Result=AssertParameterNotNull(Value, "Value", Message, Level,ThrowException);
 		}

@@ -52,7 +52,7 @@ namespace ModuleLib
 			Var = Value;
 		}
 
-		protected bool AssertParameterNotNull<T>(T Value, string Name, string ErrorMessage, LogLevels Level=LogLevels.Warning, bool ThrowException=false)
+		protected bool AssertParameterNotNull<T>(T Value, string Name, string ErrorMessage, LogLevels Level=LogLevels.Error, bool ThrowException=false)
 		{
 			if (Value == null)
 			{
@@ -63,9 +63,9 @@ namespace ModuleLib
 			return true;
 		}
 
-		protected void AssertParameterNotNull<T>(T Value, string Name, LogLevels Level = LogLevels.Warning, bool ThrowException = false)
+		protected bool AssertParameterNotNull<T>(T Value, string Name, LogLevels Level = LogLevels.Error, bool ThrowException = false)
 		{
-			AssertParameterNotNull(Value, Name, $"Parameter {Name} must be defined", Level, ThrowException);
+			return AssertParameterNotNull(Value, Name, $"Parameter {Name} must be defined", Level, ThrowException);
 		}
 
 

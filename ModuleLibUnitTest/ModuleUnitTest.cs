@@ -13,15 +13,24 @@ namespace ModuleLibUnitTest
 		[TestMethod]
 		public void ShouldNotFailWhenParametersAreNotNull()
 		{
-			Assert.AreEqual(true,new MockedModule("test", "Invalid parameter", LogLevels.Warning, true).Result);
-			Assert.AreEqual(true,new MockedModule("test", "Invalid parameter", LogLevels.Warning, false).Result);
+			MemoryLogger logger;
+
+			logger = new MemoryLogger(new DefaultLogFormatter());
+			Assert.AreEqual(true,new MockedModule(logger,"test", "Invalid parameter", LogLevels.Warning, true).Result);
+			Assert.AreEqual(true,new MockedModule(logger,"test", "Invalid parameter", LogLevels.Warning, false).Result);
+			Assert.AreEqual(0, logger.Count);
 		}
 
 		[TestMethod]
 		public void ShouldFailWhenParametersAreNotNull()
 		{
-			Assert.AreEqual(false, new MockedModule(null, "Invalid parameter", LogLevels.Warning, false).Result);
-			Assert.ThrowsException<ArgumentNullException>(()=>new MockedModule(null, "Invalid parameter", LogLevels.Warning, true));
+			MemoryLogger logger;
+
+			logger = new MemoryLogger(new DefaultLogFormatter());
+			Assert.AreEqual(false, new MockedModule(logger,null, "Invalid parameter", LogLevels.Warning, false).Result);
+			Assert.AreEqual(1, logger.Count);
+			Assert.ThrowsException<ArgumentNullException>(()=>new MockedModule(logger, null, "Invalid parameter", LogLevels.Warning, true));
+			Assert.AreEqual(2, logger.Count);
 		}
 
 
