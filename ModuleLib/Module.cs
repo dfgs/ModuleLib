@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace ModuleLib
 {
-    public abstract class Module:IModule,IDisposable
+    public abstract  class Module:IModule,IDisposable
     {
 		private static int idCounter = 0;
 		
@@ -17,24 +17,24 @@ namespace ModuleLib
 			get;
 			private set;
 		}
-		
+
 		public virtual string ModuleName
 		{
 			get { return GetType().Name; }
 		}
 
+		private ILogger logger;
 		protected ILogger Logger
 		{
-			get;
-			private set;
+			get { return logger; }
 		}
 
 		protected Module(ILogger Logger)
 		{
-			AssertParameterNotNull("Logger", Logger);
+			if (Logger==null) throw new ArgumentNullException("Logger");
+			this.logger = Logger;
 			idCounter++;
 			this.ID = idCounter;
-			this.Logger = Logger;
 		}
 
 		public virtual void Dispose()
@@ -42,9 +42,30 @@ namespace ModuleLib
 			LogEnter();
 		}
 
-		protected void AssertParameterNotNull(string Name,object Value)
+		protected void AssertParameterNotNull<T>(T Value, string Name, out T Var)
 		{
-			if (Value == null) throw new ArgumentNullException(Name);
+			if (Value == null)
+			{
+				Log(LogLevels.Fatal, $"Parameter {Name} must be defined");
+				throw new ArgumentNullException(Name);
+			}
+			Var = Value;
+		}
+
+		protected bool AssertParameterNotNull<T>(T Value, string Name, string ErrorMessage, LogLevels Level=LogLevels.Warning, bool ThrowException=false)
+		{
+			if (Value == null)
+			{
+				Log(Level, ErrorMessage);
+				if (ThrowException) throw new ArgumentNullException(Name);
+				return false;
+			}
+			return true;
+		}
+
+		protected void AssertParameterNotNull<T>(T Value, string Name, LogLevels Level = LogLevels.Warning, bool ThrowException = false)
+		{
+			AssertParameterNotNull(Value, Name, $"Parameter {Name} must be defined", Level, ThrowException);
 		}
 
 
