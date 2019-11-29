@@ -10,8 +10,16 @@ namespace ModuleLib
 {
 	public abstract class AtModule<EventType> : ThreadModule,IAtModule
 	{
-		private readonly SortedList<DateTime, EventType> events;
+		// sorted list doesn't allow duplicate keys
+		private readonly SortedList<DateTime, List<EventType>> events;
 
+		public int Count
+		{
+			get
+			{
+				lock (events) { return events.SelectMany(item=>item.Value).Count(); }
+			}
+		}
 		protected AutoResetEvent changedEvent
 		{
 			get;
@@ -23,7 +31,7 @@ namespace ModuleLib
 			Log(LogLevels.Debug, "Create changed event");
 			changedEvent = new AutoResetEvent(false);
 			Log(LogLevels.Debug, "Create events list");
-			events = new SortedList<DateTime, EventType>();
+			events = new SortedList<DateTime, List<EventType>>();
 		}
 
 		public override void Dispose()
@@ -34,13 +42,20 @@ namespace ModuleLib
 		}
 		public void Add(DateTime At,EventType Event)
 		{
+			List<EventType> items;
+
 			LogEnter();
 			lock (events)
 			{
 				Log(LogLevels.Information,$"Adding new event at {At}");
-				events.Add(At, Event);
+				if (!events.TryGetValue(At, out items))
+				{
+					items = new List<EventType>();
+					events.Add(At, items);
+				}
+				items.Add(Event);
 			}
-			changedEvent.Set();
+			if (State==ModuleStates.Started) changedEvent.Set();
 			
 		}
 
@@ -48,7 +63,7 @@ namespace ModuleLib
 
 		protected sealed override void ThreadLoop()
 		{
-			KeyValuePair<DateTime, EventType>? item;
+			KeyValuePair<DateTime, List<EventType>>? item;
 			int waitTime;
 			DateTime eventTime;
 			WaitHandle result;
@@ -94,7 +109,10 @@ namespace ModuleLib
 					{
 						events.RemoveAt(0);
 					}
-					OnTriggerEvent(item.Value.Value);
+					foreach (EventType ev in item.Value.Value)
+					{
+						OnTriggerEvent(ev);
+					}
 				}
 
 			}
