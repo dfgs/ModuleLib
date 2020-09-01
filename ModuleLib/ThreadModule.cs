@@ -65,6 +65,7 @@ namespace ModuleLib
 
 			Log(LogLevels.Debug, "Starting module");
 			State = ModuleStates.Starting;
+			OnStarting();
 			if (OnStart())
 			{
 				State = ModuleStates.Started;
@@ -77,6 +78,15 @@ namespace ModuleLib
 				Log(LogLevels.Debug, "Failed to start module");
 				return false;
 			}
+		}
+
+		protected virtual void OnStarting()
+		{
+
+		}
+		protected virtual void OnStopping()
+		{
+
 		}
 
 		private bool OnStart()
@@ -131,6 +141,7 @@ namespace ModuleLib
 			}
 
 			Log(LogLevels.Debug, "Stopping module");
+			OnStopping();
 			State = ModuleStates.Stopping;
 			if (OnStop())
 			{
