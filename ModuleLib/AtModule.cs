@@ -29,9 +29,9 @@ namespace ModuleLib
 		protected AtModule(ILogger Logger, ThreadPriority Priority = ThreadPriority.Normal, int StopTimeout = 5000) : base( Logger, Priority, StopTimeout)
 		{
 			Log(LogLevels.Debug, "Create changed event");
-			changedEvent = new AutoResetEvent(false);
+			changedEvent=new AutoResetEvent(false);
 			Log(LogLevels.Debug, "Create events list");
-			events = new SortedList<DateTime, List<EventType>>();
+			events=new SortedList<DateTime, List<EventType>>();
 		}
 
 		public override void Dispose()
@@ -81,13 +81,13 @@ namespace ModuleLib
 				if (item==null)
 				{
 					Log(LogLevels.Information, $"Waiting for change in event list");
-					result = WaitHandles(-1 , changedEvent, QuitEvent);
+					result=WaitHandles(-1 , changedEvent, QuitEvent);
 				}
 				else
 				{
 					Log(LogLevels.Debug, "Take first event in list");
 					
-					eventTime = item.Value.Key;
+					eventTime=item.Value.Key;
 					waitTime = (int)(eventTime - DateTime.Now).TotalMilliseconds;
 					if (waitTime<0)
 					{
@@ -95,7 +95,7 @@ namespace ModuleLib
 						Log(LogLevels.Warning, "Current event is in the past");
 					}
 					Log(LogLevels.Information, $"Next event will be triggered at {eventTime}");
-					result = WaitHandles(waitTime, QuitEvent, changedEvent);
+					result=WaitHandles(waitTime, QuitEvent, changedEvent);
 				}
 
 				if (result==changedEvent)

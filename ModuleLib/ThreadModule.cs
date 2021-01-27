@@ -43,7 +43,7 @@ namespace ModuleLib
 			this.StopTimeout = StopTimeout;
 
 			Log(LogLevels.Debug, "Create exit events");
-			exitEvent = new ManualResetEvent(false);
+			exitEvent=new ManualResetEvent(false);
 			QuitEvent = new ManualResetEvent(false);
 		}
 		public override void Dispose()
@@ -64,7 +64,7 @@ namespace ModuleLib
 			}
 
 			Log(LogLevels.Debug, "Starting module");
-			State = ModuleStates.Starting;
+			State=ModuleStates.Starting;
 			OnStarting();
 			if (OnStart())
 			{
@@ -102,7 +102,7 @@ namespace ModuleLib
 			Log(LogLevels.Debug, "Create thread");
 			try
 			{
-				thread = new Thread(new ThreadStart(ThreadStart));
+				thread=new Thread(new ThreadStart(ThreadStart));
 				thread.Priority = priority;
 				thread.Name = ModuleName;
 			}
@@ -142,7 +142,7 @@ namespace ModuleLib
 
 			Log(LogLevels.Debug, "Stopping module");
 			OnStopping();
-			State = ModuleStates.Stopping;
+			State=ModuleStates.Stopping;
 			if (OnStop())
 			{
 				State = ModuleStates.Stopped;
@@ -189,7 +189,7 @@ namespace ModuleLib
 			Log(LogLevels.Debug, "Call ThreadLoop");
 			ThreadLoop();
 
-			State = ModuleStates.Inactive;
+			State=ModuleStates.Inactive;
 			Log(LogLevels.Debug, "ThreadLoop terminated, trigger exit event");
 			exitEvent.Set();
 		}
@@ -202,7 +202,7 @@ namespace ModuleLib
 			int result;
 
 			Log(LogLevels.Debug, "Sleep for " + Milliseconds.ToString() + " milliseconds...");
-			result = WaitHandle.WaitAny(Handles, Milliseconds);
+			result=WaitHandle.WaitAny(Handles, Milliseconds);
 			Log(LogLevels.Debug, "Wait handle returned result " + result.ToString());
 			
 			if (result == WaitHandle.WaitTimeout) return null;

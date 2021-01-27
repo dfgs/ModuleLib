@@ -32,7 +32,7 @@ namespace ModuleLib
 		protected Module(ILogger Logger)
 		{
 			if (Logger==null) throw new ArgumentNullException("Logger");
-			this.logger = Logger;
+			this.logger=Logger;
 			idCounter++;
 			this.ID = idCounter;
 		}
