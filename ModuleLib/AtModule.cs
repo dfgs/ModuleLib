@@ -56,7 +56,47 @@ namespace ModuleLib
 				items.Add(Event);
 			}
 			if (State==ModuleStates.Started) changedEvent.Set();
-			
+		}
+
+		public void Remove(EventType Event)
+		{
+
+			LogEnter();
+			lock (events)
+			{
+				Log(LogLevels.Information, $"Removing event");
+				foreach(KeyValuePair<DateTime,List<EventType>> keyValuePair in events)
+				{
+					if (keyValuePair.Value.Contains(Event))
+					{
+						keyValuePair.Value.Remove(Event);
+						break;
+					}
+				}
+			}
+			if (State == ModuleStates.Started) changedEvent.Set();
+		}
+		public void Remove(Func<EventType,bool> Predicate)
+		{
+			EventType Event;
+
+			LogEnter();
+			lock (events)
+			{
+				Log(LogLevels.Information, $"Removing event");
+				foreach (KeyValuePair<DateTime, List<EventType>> keyValuePair in events)
+				{
+					Event = keyValuePair.Value.FirstOrDefault(Predicate);
+					if (Event!=null)
+					{
+						keyValuePair.Value.Remove(Event);
+						break;
+					}
+				}
+
+			}
+			if (State == ModuleStates.Started) changedEvent.Set();
+
 		}
 
 		protected abstract void OnTriggerEvent(EventType Event);
