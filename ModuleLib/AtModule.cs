@@ -57,7 +57,28 @@ namespace ModuleLib
 			}
 			if (State==ModuleStates.Started) changedEvent.Set();
 		}
+		public void Add( IEnumerable<EventType> Events,Func<EventType,DateTime> AtDelegate)
+		{
+			List<EventType> items;
+			DateTime At;
 
+			LogEnter();
+			lock (events)
+			{
+				foreach (EventType item in Events)
+				{
+					At = AtDelegate(item);
+					Log(LogLevels.Information, $"Adding new event at {At}");
+					if (!events.TryGetValue(At, out items))
+					{
+						items = new List<EventType>();
+						events.Add(At, items);
+					}
+					items.Add(item);
+				}
+			}
+			if (State == ModuleStates.Started) changedEvent.Set();
+		}
 		public void Remove(EventType Event)
 		{
 
