@@ -15,7 +15,7 @@ namespace ModuleLibUnitTest
 		{
 			MemoryLogger logger;
 
-			logger = new MemoryLogger(new DefaultLogFormatter());
+			logger = new MemoryLogger();
 			Assert.AreEqual(true,new MockedModule(logger,"test", "Invalid parameter", LogLevels.Warning, true).Result);
 			Assert.AreEqual(true,new MockedModule(logger,"test", "Invalid parameter", LogLevels.Warning, false).Result);
 			Assert.AreEqual(0, logger.Count);
@@ -26,7 +26,7 @@ namespace ModuleLibUnitTest
 		{
 			MemoryLogger logger;
 
-			logger = new MemoryLogger(new DefaultLogFormatter());
+			logger = new MemoryLogger();
 			Assert.AreEqual(false, new MockedModule(logger,null, "Invalid parameter", LogLevels.Warning, false).Result);
 			Assert.AreEqual(1, logger.Count);
 			Assert.ThrowsException<ArgumentNullException>(()=>new MockedModule(logger, null, "Invalid parameter", LogLevels.Warning, true));

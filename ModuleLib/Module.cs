@@ -78,13 +78,13 @@ namespace ModuleLib
 			return new TryFunction<T>(this.Logger, this.ID, this.ModuleName, MethodName, Function);
 		}
 
-		protected ITryActionAsync TryAsync(Task Action, [CallerMemberName] string MethodName = null)
+		protected ITryActionAsync TryAsync(Func<Task> Action, [CallerMemberName] string MethodName = null)
 		{
-			return new TryActionAsync(this.Logger, this.ID, this.ModuleName, MethodName, Action);
+			return new TryActionAsync(this.Logger, this.ID, this.ModuleName, MethodName, Action());
 		}
-		protected ITryFunctionAsync<T> TryAsync<T>(Task<T> Function, [CallerMemberName] string MethodName = null)
+		protected ITryFunctionAsync<T> TryAsync<T>(Func<Task<T>> Function, [CallerMemberName] string MethodName = null)
 		{
-			return new TryFunctionAsync<T>(this.Logger, this.ID, this.ModuleName, MethodName, Function);
+			return new TryFunctionAsync<T>(this.Logger, this.ID, this.ModuleName, MethodName, Function());
 		}
 
 		protected void LogEnter([CallerMemberName]string MethodName = null)
