@@ -43,8 +43,10 @@
   <ItemGroup>
     <Compile Include="AtModule.cs" />
     <Compile Include="IAtModule.cs" />
+    <Compile Include="IListenerModule.cs" />
     <Compile Include="IModule.cs" />
     <Compile Include="IThreadModule.cs" />
+    <Compile Include="ListenerModule.cs" />
     <Compile Include="Module.cs" />
     <Compile Include="ModuleStates.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
