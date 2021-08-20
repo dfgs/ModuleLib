@@ -51,6 +51,8 @@ namespace ModuleLib
 			}
 			Var = Value;
 		}
+
+		
 		protected void AssertParameter<T>(T Value, string Name, Func<T,bool> AssertFunction, out T Var)
 		{
 			if (!AssertFunction(Value))
@@ -60,6 +62,16 @@ namespace ModuleLib
 			}
 			Var = Value;
 		}
+
+		protected void AssertParameter<T>(T Value, string Name, Func<T, bool> AssertFunction)
+		{
+			if (!AssertFunction(Value))
+			{
+				Log(LogLevels.Fatal, $"Parameter {Name} must be defined");
+				throw new ArgumentNullException(Name);
+			}
+		}
+
 		protected bool AssertParameterNotNull<T>(T Value, string Name, string ErrorMessage, LogLevels Level=LogLevels.Error, bool ThrowException=false)
 		{
 			if (Value == null)
