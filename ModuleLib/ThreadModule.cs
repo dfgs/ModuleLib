@@ -188,7 +188,14 @@ namespace ModuleLib
 			}
 		
 			Log(LogLevels.Debug, "Call ThreadLoop");
-			ThreadLoop();
+			try
+			{
+				ThreadLoop();
+			}
+			catch(Exception ex)
+			{
+				Log(ex);
+			}
 
 			State=ModuleStates.Inactive;
 			Log(LogLevels.Debug, "ThreadLoop terminated, trigger exit event");
