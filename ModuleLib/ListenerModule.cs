@@ -19,17 +19,18 @@ namespace ModuleLib
 
 		protected override void ThreadLoop()
 		{
-			TConnectionModule connection;
+			TConnectionModule connection=default(TConnectionModule);
 			bool result;
 
 			LogEnter();
 			while (State==ModuleStates.Started)
 			{
 				Log(LogLevels.Information, "Waiting for new connection");
-				if (!Try(() => WaitForConnection()).OrAlert(out connection, "Connection error occured")) continue;
+
+				if (!Try(() => WaitForConnection()).Then((c) => connection = c).OrAlert("Connection error occured")) continue;
 				if (connection == null) continue;
 				Log(LogLevels.Information, "New client connected, starting module");
-				Try(() => connection.Start()).OrAlert(out result, "Failed to start connection module");
+				Try(() => connection.Start()).Then((r)=>result=r).OrAlert("Failed to start connection module");
 			}
 		}
 
