@@ -83,7 +83,7 @@ namespace ModuleLib
 
 		protected virtual void OnStarting()
 		{
-			Log(LogLevels.Debug, $"Running under account {WindowsIdentity.GetCurrent().Name}");
+			//Log(LogLevels.Debug, $"Running under account {WindowsIdentity.GetCurrent().Name}");
 		}
 		protected virtual void OnStopping()
 		{
