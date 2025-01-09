@@ -34,7 +34,7 @@ namespace ModuleLib
 
 		private readonly ManualResetEvent exitEvent;
 
-		private Thread thread;
+		private Thread? thread;
 		private readonly ThreadPriority priority;
 
 		protected ThreadModule( ILogger Logger,ThreadPriority Priority=ThreadPriority.Normal, int StopTimeout = 5000):base(Logger)
@@ -205,7 +205,7 @@ namespace ModuleLib
 		protected abstract void ThreadLoop();
 
 		
-		protected WaitHandle WaitHandles(int Milliseconds, params WaitHandle[] Handles)
+		protected WaitHandle? WaitHandles(int Milliseconds, params WaitHandle[] Handles)
 		{
 			int result;
 

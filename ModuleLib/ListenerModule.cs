@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 namespace ModuleLib
 {
 	public abstract class ListenerModule<TConnectionModule> : ThreadModule, IListenerModule
-		where TConnectionModule:IThreadModule
+		where TConnectionModule: class, IThreadModule
 	{
 		public ListenerModule(ILogger Logger, ThreadPriority Priority = ThreadPriority.Normal, int StopTimeout = 5000) : base(Logger, Priority, StopTimeout)
 		{
@@ -19,18 +19,26 @@ namespace ModuleLib
 
 		protected override void ThreadLoop()
 		{
-			TConnectionModule connection=default(TConnectionModule);
-			bool result;
+			TConnectionModule? connection=null;
+			bool success;
 
 			LogEnter();
 			while (State==ModuleStates.Started)
 			{
-				Log(LogLevels.Information, "Waiting for new connection");
 
-				if (!Try(() => WaitForConnection()).Then((c) => connection = c).OrAlert("Connection error occured")) continue;
+				success = Try("Waiting for new connection", () => WaitForConnection()).Match(
+					(c) => connection = c,
+					(ex) => Log(LogLevels.Error, "Connection error occured")
+				);
+				if (!success) continue;
+
 				if (connection == null) continue;
-				Log(LogLevels.Information, "New client connected, starting module");
-				Try(() => connection.Start()).Then((r)=>result=r).OrAlert("Failed to start connection module");
+
+				success = Try("New client connected, starting module", () => connection.Start()).Match(
+					(_) => Log(LogLevels.Information, "Module started successfully"),
+					(ex) => Log(LogLevels.Error, "Connection error occured")
+				);
+
 			}
 		}
 

@@ -88,7 +88,7 @@ namespace ModuleLib
 			return AssertParameterNotNull(Value, Name, $"Parameter {Name} must be defined", Level, ThrowException);
 		}
 
-
+		/*
 		protected ITryAction Try(Action Action, [CallerMemberName]string MethodName = null)
 		{
 			return new TryAction(this.Logger, this.ID, this.ModuleName, MethodName, Action);
@@ -106,20 +106,65 @@ namespace ModuleLib
 		{
 			return new TryFunctionAsync<T>(this.Logger, this.ID, this.ModuleName, MethodName, Function());
 		}
+		*/
+		protected IResult<T> Try<T>(Func<T> Function, [CallerMemberName] string? MethodName = null)
+		{
+			try
+			{
+				T value = Function();
+				return Result.Success(value);
+			}
+			catch (Exception ex)
+			{
+				Log(ex,MethodName);
+				return Result.Fail<T>(ex);
+			}
+		}
 
-		protected void LogEnter([CallerMemberName]string MethodName = null)
+		protected IResult<T> Try<T>(string Message, Func<T> Function, [CallerMemberName] string? MethodName = null)
+		{
+			Log(LogLevels.Information, Message,MethodName);
+			try
+			{
+				T value = Function();
+				return Result.Success(value);
+			}
+			catch (Exception ex)
+			{
+				Log(ex,MethodName);
+				return Result.Fail<T>(ex);
+			}
+		}
+
+
+		protected IResult<bool> Try(Action Action, [CallerMemberName] string? MethodName = null)
+		{
+			try
+			{
+				Action();
+				return Result.Success(true);
+			}
+			catch (Exception ex)
+			{
+				Log(ex);
+				return Result.Fail<bool>(ex);
+			}
+
+		}
+
+		protected void LogEnter([CallerMemberName]string? MethodName = null)
 		{
 			Logger.LogEnter(ID, ModuleName, MethodName);
 		}
-		protected void LogLeave([CallerMemberName]string MethodName = null)
+		protected void LogLeave([CallerMemberName]string? MethodName = null)
 		{
 			Logger.LogLeave(ID, ModuleName, MethodName);
 		}
-		protected void Log(LogLevels Level, string Message, [CallerMemberName]string MethodName = null)
+		protected void Log(LogLevels Level, string Message, [CallerMemberName]string? MethodName = null)
 		{
 			Logger.Log(ID,ModuleName,MethodName, Level, Message);
 		}
-		protected void Log(Exception ex, [CallerMemberName]string MethodName = null)
+		protected void Log(Exception ex, [CallerMemberName]string? MethodName = null)
 		{
 			Logger.Log(ID, ModuleName, MethodName, LogLevels.Error, $"An unexpected exception occured in {ModuleName}:{MethodName} ({ExceptionFormatter.Format(ex)})");
 		}

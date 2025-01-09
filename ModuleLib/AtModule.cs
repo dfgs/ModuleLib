@@ -42,7 +42,7 @@ namespace ModuleLib
 		}
 		public void Add(DateTime At,EventType Event)
 		{
-			List<EventType> items;
+			List<EventType>? items;
 
 			LogEnter();
 			lock (events)
@@ -59,7 +59,7 @@ namespace ModuleLib
 		}
 		public void Add( IEnumerable<EventType> Events,Func<EventType,DateTime> AtDelegate)
 		{
-			List<EventType> items;
+			List<EventType>? items;
 			DateTime At;
 
 			LogEnter();
@@ -99,7 +99,7 @@ namespace ModuleLib
 		}
 		public void Remove(Func<EventType,bool> Predicate)
 		{
-			EventType Event;
+			EventType? Event;
 
 			LogEnter();
 			lock (events)
@@ -127,7 +127,7 @@ namespace ModuleLib
 			KeyValuePair<DateTime, List<EventType>>? item;
 			int waitTime;
 			DateTime eventTime;
-			WaitHandle result;
+			WaitHandle? result;
 
 			LogEnter();
 						
