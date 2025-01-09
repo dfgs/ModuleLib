@@ -116,7 +116,7 @@ namespace ModuleLib
 			}
 			catch (Exception ex)
 			{
-				Log(ex,MethodName);
+				//Log(ex,MethodName);
 				return Result.Fail<T>(ex);
 			}
 		}
@@ -131,7 +131,7 @@ namespace ModuleLib
 			}
 			catch (Exception ex)
 			{
-				Log(ex,MethodName);
+				//Log(ex,MethodName);
 				return Result.Fail<T>(ex);
 			}
 		}
@@ -146,7 +146,22 @@ namespace ModuleLib
 			}
 			catch (Exception ex)
 			{
-				Log(ex);
+				//Log(ex);
+				return Result.Fail<bool>(ex);
+			}
+
+		}
+		protected IResult<bool> Try(string Message, Action Action, [CallerMemberName] string? MethodName = null)
+		{
+			Log(LogLevels.Information, Message, MethodName);
+			try
+			{
+				Action();
+				return Result.Success(true);
+			}
+			catch (Exception ex)
+			{
+				//Log(ex);
 				return Result.Fail<bool>(ex);
 			}
 
@@ -168,7 +183,10 @@ namespace ModuleLib
 		{
 			Logger.Log(ID, ModuleName, MethodName, LogLevels.Error, $"An unexpected exception occured in {ModuleName}:{MethodName} ({ExceptionFormatter.Format(ex)})");
 		}
-
+		protected void Log(ModuleException ex)
+		{
+			Logger.Log(ex.ModuleID, ex.ModuleName, ex.MethodName, LogLevels.Error, $"An unexpected exception occured in {ex.ModuleName}:{ex.MethodName} ({ExceptionFormatter.Format(ex)})");
+		}
 
 	}
 }

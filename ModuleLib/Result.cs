@@ -17,10 +17,7 @@ namespace ModuleLib
 		{
 			return Result<T>.Fail(ex);
 		}
-		public static IResult<T> Fail<T,TIn>(Result<TIn> Result )
-		{
-			return Result<T>.Fail<TIn>(Result);
-		}
+		
 
 	}
 
@@ -55,10 +52,7 @@ namespace ModuleLib
 		{
 			return new Result<T>(ex);
 		}
-		public static IResult<T> Fail<TIn>(Result<TIn> Result)
-		{
-			return new Result<T>(Result.ex);
-		}
+		
 
 
 
@@ -67,6 +61,10 @@ namespace ModuleLib
 			if (isSuccess) OnSuccess(Value); else OnFailure(ex);
 			return this.isSuccess;
 		}
+
+		
+
+
 
 		public static implicit operator Result<T>(T Value) => new Result<T>(Value);
 

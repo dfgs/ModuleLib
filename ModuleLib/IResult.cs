@@ -10,5 +10,6 @@ namespace ModuleLib
 	public interface IResult<T>
 	{
 		bool Match(Action<T> OnSuccess,Action<Exception> OnFailure);
+
 	}
 }

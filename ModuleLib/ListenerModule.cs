@@ -28,7 +28,7 @@ namespace ModuleLib
 
 				success = Try("Waiting for new connection", () => WaitForConnection()).Match(
 					(c) => connection = c,
-					(ex) => Log(LogLevels.Error, "Connection error occured")
+					(ex) => Log(ex)
 				);
 				if (!success) continue;
 
