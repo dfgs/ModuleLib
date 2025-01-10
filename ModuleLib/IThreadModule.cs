@@ -1,15 +1,7 @@
 ﻿namespace ModuleLib
 {
-	public interface IThreadModule:IModule
+	public interface IThreadModule:IStartStopModule
 	{
-		ModuleStates State
-		{
-			get;
-		}
-
-
-		IResult<bool> Start();
-		IResult<bool> Stop();
 
 	}
 }

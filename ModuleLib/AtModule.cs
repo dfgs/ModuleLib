@@ -120,7 +120,7 @@ namespace ModuleLib
 
 		}
 
-		protected abstract void OnTriggerEvent(EventType Event);
+		protected abstract IResult<bool> OnTriggerEvent(EventType Event);
 
 		protected sealed override void ThreadLoop()
 		{

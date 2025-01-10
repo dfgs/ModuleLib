@@ -9,14 +9,14 @@ using System.Threading.Tasks;
 
 namespace ModuleLibUnitTest.Mocks
 {
-	public class MockedAtModule : AtModule<DateTime>
+	public class MockedQueueModule : QueueModule<DateTime>
 	{
 		public List<DateTime> Events
 		{
 			get;
 			set;
 		}
-		public MockedAtModule() : base( new ConsoleLogger(new DefaultLogFormatter()), ThreadPriority.Normal, 5000)
+		public MockedQueueModule() : base( new ConsoleLogger(new DefaultLogFormatter()), ThreadPriority.Normal, 5000)
 		{
 			Events = new List<DateTime>();
 		}

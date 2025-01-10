@@ -1,4 +1,5 @@
-﻿using System;
+﻿using LogLib;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -30,6 +31,7 @@ namespace ModuleLib
 
 			return result!;
 		}
+
 		public static IResult<TOut> SelectResult<TIn, TOut>(this IResult<TIn> SourceResult, Func<TIn, IResult<TOut>> OnSuccess, Func<Exception, Exception> OnFail)
 		{
 			IResult<TOut>? result = null;
@@ -41,6 +43,8 @@ namespace ModuleLib
 
 			return result!;
 		}
+		
+
 
 	}
 }
