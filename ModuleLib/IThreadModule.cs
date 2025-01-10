@@ -8,8 +8,8 @@
 		}
 
 
-		bool Start();
-		bool Stop();
+		IResult<bool> Start();
+		IResult<bool> Stop();
 
 	}
 }

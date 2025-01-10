@@ -28,7 +28,7 @@ namespace ModuleLibUnitTest
 				module.Add(ev, ev);
 			}
 
-			Assert.AreEqual(true, module.Start());
+			Assert.IsTrue( module.Start().Succeeded());
 			Thread.Sleep(2000);
 			Assert.AreEqual(events.Length, module.Events.Count);
 			for(int t=0;t<module.Events.Count;t++)
@@ -36,7 +36,7 @@ namespace ModuleLibUnitTest
 				Assert.AreEqual(events[t],module.Events[t]);
 			}
 
-			Assert.AreEqual(true, module.Stop());
+			Assert.IsTrue( module.Stop().Succeeded());
 
 		}
 		[TestMethod]
@@ -47,7 +47,7 @@ namespace ModuleLibUnitTest
 			DateTime now;
 
 			module = new MockedAtModule();
-			Assert.AreEqual(true, module.Start());
+			Assert.IsTrue( module.Start().Succeeded());
 
 			now = DateTime.Now;
 			events = new DateTime[] { now.AddSeconds(1) };
@@ -63,7 +63,7 @@ namespace ModuleLibUnitTest
 				Assert.AreEqual(events[t], module.Events[t]);
 			}
 
-			Assert.AreEqual(true, module.Stop());
+			Assert.IsTrue( module.Stop().Succeeded());
 
 		}
 		[TestMethod]
@@ -74,7 +74,7 @@ namespace ModuleLibUnitTest
 			DateTime now;
 
 			module = new MockedAtModule();
-			Assert.AreEqual(true, module.Start());
+			Assert.IsTrue( module.Start().Succeeded());
 
 			now = DateTime.Now;
 			events = new DateTime[] { now.AddHours(1) };
@@ -83,7 +83,7 @@ namespace ModuleLibUnitTest
 				module.Add(ev, ev);
 			}
 			Thread.Sleep(1000);
-			Assert.AreEqual(true, module.Stop());
+			Assert.IsTrue( module.Stop().Succeeded());
 
 		}
 		[TestMethod]
@@ -94,7 +94,7 @@ namespace ModuleLibUnitTest
 			DateTime now;
 
 			module = new MockedAtModule();
-			Assert.AreEqual(true, module.Start());
+			Assert.IsTrue( module.Start().Succeeded());
 
 			now = DateTime.Now;
 			events = new DateTime[] { now.AddMilliseconds(1000), now.AddMilliseconds(1100), now.AddMilliseconds(1200), now.AddMilliseconds(1300), now.AddMilliseconds(1400), now.AddMilliseconds(1500) };
@@ -110,7 +110,7 @@ namespace ModuleLibUnitTest
 				Assert.AreEqual(events[t], module.Events[t]);
 			}
 
-			Assert.AreEqual(true, module.Stop());
+			Assert.IsTrue( module.Stop().Succeeded());
 
 		}
 
@@ -122,7 +122,7 @@ namespace ModuleLibUnitTest
 			DateTime now;
 
 			module = new MockedAtModule();
-			Assert.AreEqual(true, module.Start());
+			Assert.IsTrue( module.Start().Succeeded());
 
 			now = DateTime.Now;
 			events = new DateTime[] { now.AddMilliseconds(1000), now.AddMilliseconds(1500), now.AddMilliseconds(1400), now.AddMilliseconds(1200), now.AddMilliseconds(1300), now.AddMilliseconds(1100) };
@@ -139,7 +139,7 @@ namespace ModuleLibUnitTest
 				Assert.AreEqual(orderedEvents[t], module.Events[t]);
 			}
 
-			Assert.AreEqual(true, module.Stop());
+			Assert.IsTrue( module.Stop().Succeeded());
 
 		}
 

@@ -46,7 +46,7 @@ namespace ModuleLib
 		{
 			if (Value == null)
 			{
-				Log(LogLevels.Fatal, $"Parameter {Name} must be defined");
+				Log(Message.Fatal($"Parameter {Name} must be defined"));
 				throw new ArgumentNullException(Name);
 			}
 			Var = Value;
@@ -57,7 +57,7 @@ namespace ModuleLib
 		{
 			if (!AssertFunction(Value))
 			{
-				Log(LogLevels.Fatal, $"Parameter {Name} must be defined");
+				Log(Message.Fatal($"Parameter {Name} must be defined"));
 				throw new ArgumentNullException(Name);
 			}
 			Var = Value;
@@ -67,7 +67,7 @@ namespace ModuleLib
 		{
 			if (!AssertFunction(Value))
 			{
-				Log(LogLevels.Fatal, $"Parameter {Name} must be defined");
+				Log(Message.Fatal($"Parameter {Name} must be defined"));
 				throw new ArgumentNullException(Name);
 			}
 		}
@@ -76,7 +76,7 @@ namespace ModuleLib
 		{
 			if (Value == null)
 			{
-				Log(Level, ErrorMessage);
+				Log(new Message(Level, ErrorMessage));
 				if (ThrowException) throw new ArgumentNullException(Name);
 				return false;
 			}
@@ -121,9 +121,9 @@ namespace ModuleLib
 			}
 		}
 
-		protected IResult<T> Try<T>(string Message, Func<T> Function, [CallerMemberName] string? MethodName = null)
+		protected IResult<T> Try<T>(Message Message, Func<T> Function, [CallerMemberName] string? MethodName = null)
 		{
-			Log(LogLevels.Information, Message,MethodName);
+			Log( Message,MethodName);
 			try
 			{
 				T value = Function();
@@ -151,9 +151,9 @@ namespace ModuleLib
 			}
 
 		}
-		protected IResult<bool> Try(string Message, Action Action, [CallerMemberName] string? MethodName = null)
+		protected IResult<bool> Try(Message Message, Action Action, [CallerMemberName] string? MethodName = null)
 		{
-			Log(LogLevels.Information, Message, MethodName);
+			Log(Message, MethodName);
 			try
 			{
 				Action();
@@ -167,6 +167,16 @@ namespace ModuleLib
 
 		}
 
+		protected ModuleException CreateException(string Message, [CallerMemberName] string? MethodName = null)
+		{
+			return new ModuleException(ID, ModuleName,MethodName?? "CreateException", Message);
+		}
+		protected ModuleException CreateException(string Message,Exception InnerException, [CallerMemberName] string? MethodName = null)
+		{
+			return new ModuleException(ID, ModuleName, MethodName ?? "CreateException", Message,InnerException);
+		}
+
+
 		protected void LogEnter([CallerMemberName]string? MethodName = null)
 		{
 			Logger.LogEnter(ID, ModuleName, MethodName);
@@ -175,17 +185,17 @@ namespace ModuleLib
 		{
 			Logger.LogLeave(ID, ModuleName, MethodName);
 		}
-		protected void Log(LogLevels Level, string Message, [CallerMemberName]string? MethodName = null)
+		protected void Log(Message Message, [CallerMemberName]string? MethodName = null)
 		{
-			Logger.Log(ID,ModuleName,MethodName, Level, Message);
+			Logger.Log(ID,ModuleName,MethodName, Message);
 		}
 		protected void Log(Exception ex, [CallerMemberName]string? MethodName = null)
 		{
-			Logger.Log(ID, ModuleName, MethodName, LogLevels.Error, $"An unexpected exception occured in {ModuleName}:{MethodName} ({ExceptionFormatter.Format(ex)})");
+			Logger.Log(ID, ModuleName, MethodName, Message.Error($"An unexpected exception occured in {ModuleName}:{MethodName} ({ExceptionFormatter.Format(ex)})") );
 		}
 		protected void Log(ModuleException ex)
 		{
-			Logger.Log(ex.ModuleID, ex.ModuleName, ex.MethodName, LogLevels.Error, $"An unexpected exception occured in {ex.ModuleName}:{ex.MethodName} ({ExceptionFormatter.Format(ex)})");
+			Logger.Log(ex.ModuleID, ex.ModuleName, ex.MethodName, Message.Error($"An unexpected exception occured in {ex.ModuleName}:{ex.MethodName} ({ExceptionFormatter.Format(ex)})"));
 		}
 
 	}

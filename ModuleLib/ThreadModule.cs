@@ -34,7 +34,7 @@ namespace ModuleLib
 
 		private readonly ManualResetEvent exitEvent;
 
-		private Thread? thread;
+		//private Thread? thread;
 		private readonly ThreadPriority priority;
 
 		protected ThreadModule( ILogger Logger,ThreadPriority Priority=ThreadPriority.Normal, int StopTimeout = 5000):base(Logger)
@@ -43,137 +43,155 @@ namespace ModuleLib
 			this.priority = Priority;
 			this.StopTimeout = StopTimeout;
 
-			Log(LogLevels.Debug, "Create exit events");
+			Log(Message.Debug( "Create exit events"));
 			exitEvent=new ManualResetEvent(false);
 			QuitEvent = new ManualResetEvent(false);
 		}
 		public override void Dispose()
 		{
 			base.Dispose();
-			Log(LogLevels.Debug, "Dispose events");
+			Log(Message.Debug("Dispose events"));
 			exitEvent.Close();
 			QuitEvent.Close();
 		}
-		public bool Start()
+		public IResult<bool> Start()
 		{
+			IResult<bool> result;
+
 			LogEnter();
 
 			if (State!=ModuleStates.Stopped)
 			{
-				Log(LogLevels.Debug, "Current module state is not stopped");
-				return false;
+				Log(Message.Debug("Current module state is not stopped"));
+				return Result.Fail<bool>(CreateException("Current module state is not stopped"));
 			}
 
-			Log(LogLevels.Debug, "Starting module");
+			Log(Message.Debug("Starting module"));
 			State=ModuleStates.Starting;
-			OnStarting();
-			if (OnStart())
-			{
-				State = ModuleStates.Started;
-				Log(LogLevels.Debug, "Module started");
-				return true;
-			}
-			else
-			{
-				State = ModuleStates.Error;
-				Log(LogLevels.Debug, "Failed to start module");
-				return false;
-			}
+
+			result = 
+			OnStarting()
+			.SelectResult((_) => OnStart(), (ex) => ex)
+			.Select(
+				(_)=>
+				{
+					State = ModuleStates.Started;
+					Log(Message.Debug("Module started"));
+					return true;
+				},
+				(ex)=>
+				{
+					State = ModuleStates.Error;
+					Log(Message.Error("Failed to start module"));
+					return CreateException("Failed to start module",ex);
+				}
+			);
+
+			return result;
 		}
 
-		protected virtual void OnStarting()
+		protected virtual IResult<bool> OnStarting()
 		{
 			//Log(LogLevels.Debug, $"Running under account {WindowsIdentity.GetCurrent().Name}");
+			return Result.Success<bool>(true);
 		}
-		protected virtual void OnStopping()
+		protected virtual IResult<bool> OnStopping()
 		{
-
+			return Result.Success<bool>(true);
 		}
 
-		private bool OnStart()
+		private IResult<bool> OnStart()
 		{
+			IResult<Thread> createThreadResult;
+			IResult<bool> startThreadResult;
+			Thread? thread = null;
 			LogEnter();
 
-			Log(LogLevels.Debug, "Reset exit event");
+			Log(Message.Debug("Reset exit event"));
 			exitEvent.Reset();
-			Log(LogLevels.Debug, "Reset quit event");
+			Log(Message.Debug("Reset quit event"));
 			QuitEvent.Reset();
 
 			#region try to create thread
-			Log(LogLevels.Debug, "Create thread");
-			try
+			createThreadResult=Try(Message.Debug("Create thread"),() =>
 			{
-				thread=new Thread(new ThreadStart(ThreadStart));
+				thread = new Thread(new ThreadStart(ThreadStart));
 				thread.Priority = priority;
 				thread.Name = ModuleName;
-			}
-			catch (Exception ex)
-			{
-				Log(ex);
-				return false;
-			}
+				return thread;
+			});
 			#endregion
+
 
 			#region try to start thread
-			Log(LogLevels.Debug, "Start thread");
-			try
-			{
-				thread.Start();
-			}
-			catch (Exception ex)
-			{
-				Log(ex);
-				return false;
-			}
+			startThreadResult = createThreadResult.SelectResult<Thread, bool>(
+				(thread) =>
+				{
+					return Try(Message.Debug("Start thread"), () => thread.Start()).Select(
+						(_) => true,
+						(ex) => CreateException("Failed to start thread", ex)
+					);
+				},
+				(ex) => CreateException("Failed to create thread", ex)
+			);
 			#endregion
 
 
-			return true;
+			return startThreadResult;
 		}
 
-		public bool Stop()
+		public IResult<bool> Stop()
 		{
+			IResult<bool> result;
+
 			LogEnter();
 
 			if (State != ModuleStates.Started)
 			{
-				Log(LogLevels.Debug, "Current module state is not started");
-				return false;
+				Log(Message.Debug("Current module state is not started"));
+				return Result.Fail<bool>(CreateException("Current module state is not started"));
 			}
 
-			Log(LogLevels.Debug, "Stopping module");
-			OnStopping();
-			State=ModuleStates.Stopping;
-			if (OnStop())
-			{
-				State = ModuleStates.Stopped;
-				Log(LogLevels.Debug, "Module stopped");
-				return true;
-			}
-			else
-			{
-				State = ModuleStates.Error;
-				Log(LogLevels.Debug, "Failed to stop module");
-				return false;
-			}
+			Log(Message.Debug("Stopping module"));
+			State = ModuleStates.Stopping;
+
+			result =
+			OnStopping()
+			.SelectResult( (_) => OnStop(), (ex) => ex)
+			.Select(
+				(_) =>
+				{
+					State = ModuleStates.Stopped;
+					Log(Message.Debug("Module stopped"));
+					return true;
+				},
+				(ex) =>
+				{
+					State = ModuleStates.Error;
+					Log(Message.Warning("Failed to stop module"));
+					return CreateException("Failed to stop module", ex);
+				}
+			);
+
+			return result;			
 		}
 
-		private bool OnStop()
+		private IResult<bool> OnStop()
 		{
 			LogEnter();
 
-			Log(LogLevels.Debug, "Trigger quit event");
+			Log(Message.Debug("Trigger quit event"));
 			QuitEvent.Set();
 
 			if (exitEvent.WaitOne(StopTimeout))
 			{
-				Log(LogLevels.Debug, "Thread stopped gracefully");
-				return true;
+				Log(Message.Debug("Thread stopped gracefully"));
+				return Result.Success(true);
 			}
 			else
 			{
-				Log(LogLevels.Warning, "Thread didn't stop gracefully");
-				return false;
+				Log(Message.Warning("Thread didn't stop gracefully"));
+				return Result.Fail<bool>(CreateException("Thread didn't stop gracefully"));
 			}
 		}
 
@@ -183,11 +201,11 @@ namespace ModuleLib
 			LogEnter();
 			while (State != ModuleStates.Started)
 			{
-				Log(LogLevels.Debug, "Wait 100 ms, state need to be started");
+				Log(Message.Debug("Wait 100 ms, state need to be started"));
 				Thread.Sleep(100);
 			}
 		
-			Log(LogLevels.Debug, "Call ThreadLoop");
+			Log(Message.Debug("Call ThreadLoop"));
 			try
 			{
 				ThreadLoop();
@@ -198,7 +216,7 @@ namespace ModuleLib
 			}
 
 			State=ModuleStates.Inactive;
-			Log(LogLevels.Debug, "ThreadLoop terminated, trigger exit event");
+			Log(Message.Debug("ThreadLoop terminated, trigger exit event"));
 			exitEvent.Set();
 		}
 
@@ -209,9 +227,9 @@ namespace ModuleLib
 		{
 			int result;
 
-			Log(LogLevels.Debug, "Sleep for " + Milliseconds.ToString() + " milliseconds...");
+			Log(Message.Debug("Sleep for " + Milliseconds.ToString() + " milliseconds..."));
 			result=WaitHandle.WaitAny(Handles, Milliseconds);
-			Log(LogLevels.Debug, "Wait handle returned result " + result.ToString());
+			Log(Message.Debug("Wait handle returned result " + result.ToString()));
 			
 			if (result == WaitHandle.WaitTimeout) return null;
 			else return Handles[result];

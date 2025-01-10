@@ -24,13 +24,13 @@ namespace ModuleLib
 	public class Result<T> : IResult<T>
 	{
 		private Exception ex;
-		private bool isSuccess;
+		private bool succeded;
 		private T Value;
 
 		private Result(T Value)
 		{
 			this.Value = Value;
-			this.isSuccess = true;
+			this.succeded = true;
 			ex = new Exception("Not provided");
 		}
 #pragma warning disable CS8601 // Existence possible d'une assignation de référence null.
@@ -39,7 +39,7 @@ namespace ModuleLib
 		{
 			this.Value = default;
 			this.ex = exception;
-			this.isSuccess=false;
+			this.succeded=false;
 		}
 #pragma warning restore CS8618 // Existence possible d'une assignation de référence null.
 #pragma warning restore CS8601 // Existence possible d'une assignation de référence null.
@@ -53,13 +53,17 @@ namespace ModuleLib
 			return new Result<T>(ex);
 		}
 		
-
+		
+		public bool Succeeded()
+		{
+			return succeded;
+		}
 
 
 		public bool Match(Action<T> OnSuccess, Action<Exception> OnFailure)
 		{
-			if (isSuccess) OnSuccess(Value); else OnFailure(ex);
-			return this.isSuccess;
+			if (succeded) OnSuccess(Value); else OnFailure(ex);
+			return this.succeded;
 		}
 
 		

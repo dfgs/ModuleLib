@@ -28,16 +28,16 @@ namespace ModuleLib
 
 		protected AtModule(ILogger Logger, ThreadPriority Priority = ThreadPriority.Normal, int StopTimeout = 5000) : base( Logger, Priority, StopTimeout)
 		{
-			Log(LogLevels.Debug, "Create changed event");
+			Log(Message.Debug("Create changed event"));
 			changedEvent=new AutoResetEvent(false);
-			Log(LogLevels.Debug, "Create events list");
+			Log(Message.Debug("Create events list"));
 			events=new SortedList<DateTime, List<EventType>>();
 		}
 
 		public override void Dispose()
 		{
 			base.Dispose();
-			Log(LogLevels.Debug, "Dispose events");
+			Log(Message.Debug("Dispose events"));
 			changedEvent.Close();
 		}
 		public void Add(DateTime At,EventType Event)
@@ -47,7 +47,7 @@ namespace ModuleLib
 			LogEnter();
 			lock (events)
 			{
-				Log(LogLevels.Information,$"Adding new event at {At}");
+				Log(Message.Information($"Adding new event at {At}"));
 				if (!events.TryGetValue(At, out items))
 				{
 					items = new List<EventType>();
@@ -68,7 +68,7 @@ namespace ModuleLib
 				foreach (EventType item in Events)
 				{
 					At = AtDelegate(item);
-					Log(LogLevels.Information, $"Adding new event at {At}");
+					Log(Message.Information($"Adding new event at {At}"));
 					if (!events.TryGetValue(At, out items))
 					{
 						items = new List<EventType>();
@@ -85,7 +85,7 @@ namespace ModuleLib
 			LogEnter();
 			lock (events)
 			{
-				Log(LogLevels.Information, $"Removing event");
+				Log(Message.Information($"Removing event"));
 				foreach(KeyValuePair<DateTime,List<EventType>> keyValuePair in events)
 				{
 					if (keyValuePair.Value.Contains(Event))
@@ -104,7 +104,7 @@ namespace ModuleLib
 			LogEnter();
 			lock (events)
 			{
-				Log(LogLevels.Information, $"Removing event");
+				Log(Message.Information($"Removing event"));
 				foreach (KeyValuePair<DateTime, List<EventType>> keyValuePair in events)
 				{
 					Event = keyValuePair.Value.FirstOrDefault(Predicate);
@@ -141,31 +141,31 @@ namespace ModuleLib
 
 				if (item==null)
 				{
-					Log(LogLevels.Information, $"Waiting for change in event list");
+					Log(Message.Information($"Waiting for change in event list"));
 					result=WaitHandles(-1 , changedEvent, QuitEvent);
 				}
 				else
 				{
-					Log(LogLevels.Debug, "Take first event in list");
+					Log(Message.Debug("Take first event in list"));
 					
 					eventTime=item.Value.Key;
 					waitTime = (int)(eventTime - DateTime.Now).TotalMilliseconds;
 					if (waitTime<0)
 					{
 						waitTime = 0;
-						Log(LogLevels.Warning, "Current event is in the past");
+						Log(Message.Warning("Current event is in the past"));
 					}
-					Log(LogLevels.Information, $"Next event will be triggered at {eventTime}");
+					Log(Message.Information($"Next event will be triggered at {eventTime}"));
 					result=WaitHandles(waitTime, QuitEvent, changedEvent);
 				}
 
 				if (result==changedEvent)
 				{
-					Log(LogLevels.Information, $"Event list has changed");
+					Log(Message.Information($"Event list has changed"));
 				}
 				else if ((item!=null)&&(result != QuitEvent))
 				{
-					Log(LogLevels.Information, $"Triggering event");
+					Log(Message.Information($"Triggering event"));
 					lock(events)
 					{
 						events.RemoveAt(0);

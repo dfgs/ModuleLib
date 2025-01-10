@@ -53,15 +53,19 @@ namespace ModuleLibUnitTest.Mocks
 		protected override void ThreadLoop()
 		{
 			LoopStarted = true;
+			Log(Message.Debug("LoopStarted=true"));
 			WaitHandles(-1, ContinueEvent);
 
 			LoopRunning = true;
+			Log(Message.Debug("LoopRunning=true"));
 			WaitHandles(-1, ContinueEvent);
 
 			LoopExiting = true;
+			Log(Message.Debug("LoopExiting=true"));
 			WaitHandles(-1, ContinueEvent);
 
 			LoopExited = true;
+			Log(Message.Debug("LoopExited=true"));
 			WaitHandles(-1, ContinueEvent); // used to block gracefull stop
 			WaitHandles(-1, QuitEvent);
 

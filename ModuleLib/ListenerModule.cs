@@ -26,7 +26,7 @@ namespace ModuleLib
 			while (State==ModuleStates.Started)
 			{
 
-				success = Try("Waiting for new connection", () => WaitForConnection()).Match(
+				success = Try(Message.Debug( "Waiting for new connection"), () => WaitForConnection()).Match(
 					(c) => connection = c,
 					(ex) => Log(ex)
 				);
@@ -34,9 +34,9 @@ namespace ModuleLib
 
 				if (connection == null) continue;
 
-				success = Try("New client connected, starting module", () => connection.Start()).Match(
-					(_) => Log(LogLevels.Information, "Module started successfully"),
-					(ex) => Log(LogLevels.Error, "Connection error occured")
+				success = Try(Message.Debug("New client connected, starting module"), () => connection.Start()).Match(
+					(_) => Log(Message.Information("Module started successfully")),
+					(ex) => Log(Message.Error("Connection error occured"))
 				);
 
 			}
