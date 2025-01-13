@@ -88,25 +88,7 @@ namespace ModuleLib
 			return AssertParameterNotNull(Value, Name, $"Parameter {Name} must be defined", Level, ThrowException);
 		}
 
-		/*
-		protected ITryAction Try(Action Action, [CallerMemberName]string MethodName = null)
-		{
-			return new TryAction(this.Logger, this.ID, this.ModuleName, MethodName, Action);
-		}
-		protected ITryFunction<T> Try<T>(Func<T> Function, [CallerMemberName]string MethodName = null)
-		{
-			return new TryFunction<T>(this.Logger, this.ID, this.ModuleName, MethodName, Function);
-		}
-
-		protected ITryActionAsync TryAsync(Func<Task> Action, [CallerMemberName] string MethodName = null)
-		{
-			return new TryActionAsync(this.Logger, this.ID, this.ModuleName, MethodName, Action());
-		}
-		protected ITryFunctionAsync<T> TryAsync<T>(Func<Task<T>> Function, [CallerMemberName] string MethodName = null)
-		{
-			return new TryFunctionAsync<T>(this.Logger, this.ID, this.ModuleName, MethodName, Function());
-		}
-		*/
+		
 		protected IResult<T> Try<T>(Func<T> Function, [CallerMemberName] string? MethodName = null)
 		{
 			try
@@ -116,7 +98,7 @@ namespace ModuleLib
 			}
 			catch (Exception ex)
 			{
-				//Log(ex,MethodName);
+				Log(ex,MethodName);
 				return Result.Fail<T>(ex);
 			}
 		}
@@ -131,7 +113,7 @@ namespace ModuleLib
 			}
 			catch (Exception ex)
 			{
-				//Log(ex,MethodName);
+				Log(ex,MethodName);
 				return Result.Fail<T>(ex);
 			}
 		}
@@ -146,7 +128,7 @@ namespace ModuleLib
 			}
 			catch (Exception ex)
 			{
-				//Log(ex);
+				Log(ex);
 				return Result.Fail<bool>(ex);
 			}
 
@@ -161,7 +143,7 @@ namespace ModuleLib
 			}
 			catch (Exception ex)
 			{
-				//Log(ex);
+				Log(ex);
 				return Result.Fail<bool>(ex);
 			}
 
