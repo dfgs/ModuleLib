@@ -36,8 +36,8 @@ namespace ModuleLib
 		}
 		public override string ToString()
 		{
-			if (InnerException==null) return $"An unexpected exception occured in {ModuleName}:{MethodName} (Message)";
-			else return $"An unexpected exception occured in {ModuleName}:{MethodName} (Message) -> {InnerException.ToString()}";
+			if (InnerException==null) return $"An unexpected exception occured in {ModuleName}:{MethodName} ({Message})";
+			else return $"An unexpected exception occured in {ModuleName}:{MethodName} ({Message}) -> {InnerException.ToString()}";
 
 		}
 

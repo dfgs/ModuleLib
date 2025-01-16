@@ -113,7 +113,6 @@ namespace ModuleLib
 			}
 			catch (Exception ex)
 			{
-				Log(ex,MethodName);
 				return Result.Fail<T>(ex);
 			}
 		}

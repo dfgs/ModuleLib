@@ -78,18 +78,21 @@ namespace ModuleLib
 
 				if (item == null)
 				{
-					Log(Message.Information($"Waiting for change in event list"));
+					Log(Message.Debug($"Waiting for change in event list"));
 					result = WaitHandles(-1, changedEvent, QuitEvent);
 
 					if (result == changedEvent)
 					{
-						Log(Message.Information($"Event list has changed"));
+						Log(Message.Debug($"Event list has changed"));
 					}
 				}
 				else
 				{
-					Log(Message.Information($"Triggering event"));
-					OnTriggerEvent(item.Item2);
+					Log(Message.Debug($"Triggering event"));
+					OnTriggerEvent(item.Item2).Match(
+						(_) => { } ,
+						(ex) => Log(ex)
+					);
 				}
 
 
