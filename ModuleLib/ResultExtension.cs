@@ -43,7 +43,13 @@ namespace ModuleLib
 
 			return result!;
 		}
-		
+		public static IResult<TOut> Then<TIn, TOut>(this IResult<TIn> FirstResult,IResult<TOut> NextResult)
+		{
+			return FirstResult.SelectResult(
+				(_) => NextResult ,
+				(ex) => ex
+			);
+		}
 
 
 	}
