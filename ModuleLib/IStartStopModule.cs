@@ -1,4 +1,6 @@
-﻿namespace ModuleLib
+﻿using ResultTypeLib;
+
+namespace ModuleLib
 {
 	public interface IStartStopModule:IModule
 	{
