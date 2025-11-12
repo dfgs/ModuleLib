@@ -20,21 +20,19 @@ namespace ModuleLib
 		protected override void ThreadLoop()
 		{
 			TConnectionModule? connection=null;
-			bool success;
 
 			LogEnter();
 			while (State==ModuleStates.Started)
 			{
 
-				success = Try(Message.Debug( "Waiting for new connection"), () => WaitForConnection()).Match(
+				if (!Try(Message.Debug( "Waiting for new connection"), () => WaitForConnection()).Match(
 					(c) => connection = c,
 					(ex) => Log(ex)
-				);
-				if (!success) continue;
-
+				).Succeeded()) continue;
+				
 				if (connection == null) continue;
 
-				success = Try(Message.Debug("New client connected, starting module"), () => connection.Start()).Match(
+				Try(Message.Debug("New client connected, starting module"), () => connection.Start()).Match(
 					(_) => Log(Message.Information("Module started successfully")),
 					(ex) => Log(Message.Error("Connection error occured"))
 				);
